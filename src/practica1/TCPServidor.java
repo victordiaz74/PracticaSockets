@@ -7,21 +7,35 @@ import java.net.UnknownHostException;
 
 public abstract class TCPServidor {
 
-    ServerSocket socketServidor;
-    Socket conexion;
-    
-	public TCPServidor(int puerto) {
-		try {
-			socketServidor = new ServerSocket(puerto);
-			System.out.println("Servicio escuchando...");
-			conexion = socketServidor.accept();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+protected Socket socketServidor = null;
+	
+	private int puerto;
+	
+	public TCPServidor(int puerto)
+	{
+		this.puerto = puerto;
+		
+		try 
+		{
+			System.out.println("servidor esperando que le lleguen peticiones...");
+			ServerSocket SocketServidor = new ServerSocket(puerto);
+			socketServidor = SocketServidor.accept();
+
+			System.out.println("Comunicacion establecida");
 		}
+		catch (IOException e) 
+		{
+			System.out.println("Error en las comunicaciones");
+			System.exit(0);
+		} 
+		catch (SecurityException e) 
+		{
+			System.out.println("Comunicacion no permitida por razones de seguridad");
+			System.exit(0);
+		}
+	
 	}
 	
-	abstract void startServidor();
+	public abstract void startServidor();
 
 }

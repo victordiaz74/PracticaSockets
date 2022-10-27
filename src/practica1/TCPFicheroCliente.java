@@ -12,57 +12,61 @@ import java.util.Scanner;
 
 public class TCPFicheroCliente extends TCPCliente{
 
-	public TCPFicheroCliente(String host, int puerto) {
-
-		super(host, puerto);
-		Scanner sc = new Scanner(System.in);
-		String numbytesLeidosFich = sc.nextLine();
-		File file = new File(numbytesLeidosFich);
-		FileInputStream fis = new FileInputStream("ficheroSocket");
-		BufferedReader br = new BufferedReader(fis);
-		DataOutputStream dos = new DataOutputStream(socketCliente.getOutputStream());
-		
-		
-		startCliente();
+	private int tamax;
+	private FileInputStream fis;
+	private DataOutputStream dos;
+	File fichero = null;
+	String nombreFich;
 	
+	
+	public TCPFicheroCliente(String ip, int port) throws IOException {
+		super(ip, port);
+		tamax = 256;
+		
+			System.out.println("introduce la ruta del fichero: ");
+			Scanner sc = new Scanner(System.in);
+			nombreFich = sc.nextLine();
+			fichero = new File(nombreFich);
+			
+			fis = new FileInputStream(fichero);
+			dos = new DataOutputStream(socketCliente().getOutputStream());
+		
+			startCliente();
 	}
 
 	@Override
 	public void startCliente() {
-		File fichero = new File("ficheroSocket");
-		byte[] buffer = new byte[256];
-		int bytesLeidos = 0;
+		
+		byte buffer[] = new byte[tamax];
+		int br = 0;
 		do {
 			try {
-				bytesLeidos = fis.read(buffer);
-			}catch(IOException e) {
-				System.out.println("Error al leer");
+				//leer fichero
+				br = fis.read(buffer);
+			} catch(IOException e) {
+				System.err.println("error de al leer");
+				System.err.println(e.getMessage());
 			}
 			try {
-				dos.write(buffer, 0, bytesLeidos);
-			}catch(IOException e) {
+				dos.write(buffer, 0, br);
+			} catch(IOException e) {
 				System.err.println("error al escribir");
+				System.err.println(e.getMessage());
 			}
-		}while(bytesLeidos == 256);
+		} while(br == tamax);
 		
 		try {
-			
 			fis.close();
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
-		
 		try {
 			dos.close();
-			System.out.println("fichero enviado");
-		}catch (IOException e) {
-			
+			System.out.println();
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
 		}
-		
-		
 	}
+	
 
 }

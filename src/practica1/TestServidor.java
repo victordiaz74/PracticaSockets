@@ -3,7 +3,7 @@ package practica1;
 public class TestServidor {
 
 	public static void main(String[] args) {
-		TCPTeletipoServidor servidor = new TCPTeletipoServidor(8023);
+		new TCPFicheroServidor(8023);
 	}
 
 }

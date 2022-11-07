@@ -17,10 +17,10 @@ public class ThreadedEchoServer {
 		try {
 			int i = 1;
 			ServerSocket s = new ServerSocket(8189);
-
+			System.out.println("Petición del Cliente " + i);
 			while (true) {
 				Socket incoming = s.accept();
-				System.out.println("Petición del Cliente " + i);
+				
 				Thread t = new ThreadedEchoHandler(incoming, i);
 				t.start();
 				i++;

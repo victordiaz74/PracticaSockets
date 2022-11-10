@@ -37,13 +37,9 @@ public class ServidorFecha {
 
 
 class EnviarFecha extends Thread {
+	
 	private Socket socket;
-	/**
-	 * Constructs a handler.
-	 * 
-	 * @param i the incoming socket
-	 * @param c the counter for the handlers (used in prompts)
-	 */
+	
 	public EnviarFecha(Socket i) {
 		socket = i;
 

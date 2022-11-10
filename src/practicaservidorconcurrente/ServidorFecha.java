@@ -18,12 +18,12 @@ public class ServidorFecha {
 			ServerSocket s = new ServerSocket(8900);
 			System.out.println("Servidor encendido");
 			while (true) {
-				Socket socket = s.accept();
+				Socket cliente = s.accept();
 				i++;
 				System.out.println("Atendiendo peticion del cliente" + i);
-				System.out.println("\nPuerto: " + socket.getPort());
-				System.out.println("IP: " + socket.getInetAddress());
-				Thread tarea = new EnviarFecha(socket);
+				System.out.println("\nPuerto: " + cliente.getPort());
+				System.out.println("IP: " + cliente.getInetAddress());
+				Thread tarea = new EnviarFecha(cliente);
 				tarea.start();
 				
 			}
@@ -46,19 +46,16 @@ class EnviarFecha extends Thread {
 	}
 
 	public void run() {
+		
+		Date fecha = new Date();
 		try {
-			BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			PrintWriter salida = new PrintWriter(socket.getOutputStream(), true /* autoFlush */);
 
-			salida.println("Hola! Introduce salir para salir.");
-
-			Date fecha = new Date();
 			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 			
 			oos.writeObject(fecha);
 			
-			
 			socket.close();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -11,10 +11,15 @@ public class ClienteFecha {
 		String servidor = "localhost";
 		int puerto = 8900;
 		
+		
 		try {
+			//Me conecto al servidor
 			Socket cliente = new Socket(servidor, puerto);
-			ObjectInputStream entradaObjeto = new ObjectInputStream(cliente.getInputStream());
-			System.out.println(entradaObjeto.readObject());
+			//Creamos un flujo de entrada para leer la fecha que nos pasa el servidor
+			ObjectInputStream ois = new ObjectInputStream(cliente.getInputStream());
+			//Muestra por pantalla la fecha enviada por el servidor
+			System.out.println(ois.readObject());
+			//Cierro la conexion
 			cliente.close();
 			
 		}catch (IOException e) {

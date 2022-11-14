@@ -9,7 +9,7 @@ public class Cliente {
 
 	public static void main(String[] args) {
 		String servidor = "localhost";
-		int puerto = 11000;		
+		int puerto = 11100;		
 		
 		try {
 			//Me conecto al servidor
@@ -35,13 +35,14 @@ public class Cliente {
 			
 			array = (int []) ois.readObject();
 			array1 = (int []) ois.readObject();
+			int [] arrayFusionado = (int []) ois.readObject();
 			//Muestra por pantalla el array enviada por el servidor
 			System.out.println("Array ordenado: ");
 			visualizarArray(array);
 			System.out.println("Array 1 ordenado: ");
 			visualizarArray(array1);
 			System.out.println("Array fusionado: ");
-			visualizarArray(array);
+			visualizarArray(arrayFusionado);
 			//Cierro la conexion
 			cliente.close();
 			

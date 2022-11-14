@@ -12,7 +12,7 @@ public class OrdenaArrays {
 	public static void main(String[] args) {
 
 		try {
-			ServerSocket serverSocket = new ServerSocket(11000);
+			ServerSocket serverSocket = new ServerSocket(11100);
 			System.out.println("Servidor encendido");
 			while(true) {
 				Socket cliente = serverSocket.accept();
@@ -87,7 +87,6 @@ class OrdenaArray extends Thread {
 			k++;
 			j++;
 		}
-		arrayFusion.length = k;
 		return arrayFusion;
 	}
 	
@@ -106,8 +105,11 @@ class OrdenaArray extends Thread {
 			ordenaBurbuja(arrayCliente1);
 			int [] arrayFusionado = fusion(arrayCliente, arrayCliente1);
 			
+			oos.writeObject(arrayCliente);
+			oos.writeObject(arrayCliente1);
 			oos.writeObject(arrayFusionado);
-		
+			oos.close();
+			ois.close();
 		
 		} catch (IOException e) {
 			e.printStackTrace();

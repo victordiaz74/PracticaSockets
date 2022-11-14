@@ -93,21 +93,27 @@ class OrdenaArray extends Thread {
 	public void run() {
 		
 		try {
+			//Creamos los flujos de entrada y salida
 			ObjectInputStream ois = new ObjectInputStream(cliente.getInputStream());
 			
 			ObjectOutputStream oos = new ObjectOutputStream(cliente.getOutputStream());
 			
+			//Recibimos los arrays sin ordenar del cliente
 			int [] arrayCliente = (int[]) ois.readObject();
 			
 			int [] arrayCliente1 = (int []) ois.readObject();
 			
+			//ordenamos los arrays y los fusionamos
 			ordenaBurbuja(arrayCliente);
 			ordenaBurbuja(arrayCliente1);
 			int [] arrayFusionado = fusion(arrayCliente, arrayCliente1);
 			
+			//pasamos los arrays al cliente
 			oos.writeObject(arrayCliente);
 			oos.writeObject(arrayCliente1);
 			oos.writeObject(arrayFusionado);
+			
+			//cerramos flujos
 			oos.close();
 			ois.close();
 		

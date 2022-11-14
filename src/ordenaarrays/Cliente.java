@@ -30,19 +30,23 @@ public class Cliente {
 			//Creamos un flujo de entrada para leer la fecha que nos pasa el servidor
 			ObjectInputStream ois = new ObjectInputStream(cliente.getInputStream());
 			
+			//Enviar arrays sin ordenar al servidor
 			oos.writeObject(array);
 			oos.writeObject(array1);
 			
+			//Leemos los arrays del servidor ya ordenados y fusionados
 			array = (int []) ois.readObject();
 			array1 = (int []) ois.readObject();
 			int [] arrayFusionado = (int []) ois.readObject();
-			//Muestra por pantalla el array enviada por el servidor
+			
+			//Muestra por pantalla los arrays enviados por el servidor
 			System.out.println("Array ordenado: ");
 			visualizarArray(array);
 			System.out.println("Array 1 ordenado: ");
 			visualizarArray(array1);
 			System.out.println("Array fusionado: ");
 			visualizarArray(arrayFusionado);
+			
 			//Cierro la conexion
 			cliente.close();
 			

@@ -9,23 +9,20 @@ public class Cliente {
 
 	public static void main(String[] args) {
 		String servidor = "localhost";
-		int puerto = 9000;
-		
-		int [] array1 = new int[10];
-		for (int i=0;i<array1.length;i++)
-			array1[i] = (int) (Math.random()*10)+1;
-		
-		
-		int [] array2 = new int[10];
-		for (int j=0;j<array2.length;j++)
-			array2[j] = (int) (Math.random()*10)+1;
-		
+		int puerto = 11000;		
 		
 		try {
 			//Me conecto al servidor
 			Socket cliente = new Socket(servidor, puerto);
 			
+			//Declaramos e instanciamos un array de enteros sin ordenar.
+			int [] array = {4, 7, 13, 2, 25, 6, 28, 45};
+			
+			int [] array1 = {41, 3, 5, 17, 6, 24};
+			
 			System.out.println("Array sin ordenar");
+			visualizarArray(array);
+			System.out.println("Array 1 sin ordenar");
 			visualizarArray(array1);
 			//Enviar datos al servidor
 			ObjectOutputStream oos = new ObjectOutputStream(cliente.getOutputStream());
@@ -33,9 +30,18 @@ public class Cliente {
 			//Creamos un flujo de entrada para leer la fecha que nos pasa el servidor
 			ObjectInputStream ois = new ObjectInputStream(cliente.getInputStream());
 			
+			oos.writeObject(array);
 			oos.writeObject(array1);
+			
+			array = (int []) ois.readObject();
+			array1 = (int []) ois.readObject();
 			//Muestra por pantalla el array enviada por el servidor
-			System.out.println(ois.readObject());
+			System.out.println("Array ordenado: ");
+			visualizarArray(array);
+			System.out.println("Array 1 ordenado: ");
+			visualizarArray(array1);
+			System.out.println("Array fusionado: ");
+			visualizarArray(array);
 			//Cierro la conexion
 			cliente.close();
 			
@@ -46,9 +52,9 @@ public class Cliente {
 		}
 	}
 
-	private static void visualizarArray(int[] array1) {
-		for (int i=0;i<array1.length;i++) {
-			System.out.println(i);
+	private static void visualizarArray(int[] array) {
+		for (int i=0;i<array.length;i++) {
+			System.out.println(array[i] + " ");
 		}
 		
 	}

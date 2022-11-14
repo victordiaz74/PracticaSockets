@@ -1,11 +1,8 @@
 package ordenaarrays;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -14,19 +11,31 @@ public class OrdenaArrays {
 
 	public static void main(String[] args) {
 
-		int i = 1;
-		ServerSocket serverSocket = new ServerSocket(9000);
-		System.out.println("Peticion del cliente: " + i);
-		while(true) {
-			Socket cliente = serverSocket.accept();
-			Cliente hCliente = new Cliente(cliente);
-			hCliente.start();
-			i++;
+		try {
+			ServerSocket serverSocket = new ServerSocket(11000);
+			System.out.println("Servidor encendido");
+			while(true) {
+				Socket cliente = serverSocket.accept();
+				Thread tarea = new OrdenaArray(cliente);
+				tarea.start();
+				
+			}
+		}catch (IOException e) {
+			e.printStackTrace();
 		}
 		
-
 	}
+}
 
+class OrdenaArray extends Thread {
+	
+	Socket cliente;
+	
+	public OrdenaArray(Socket s) {
+		cliente = s;
+	}
+	
+	
 	public static void ordenaBurbuja(int array[]) {
 		/*Recorremos el array, comparamos elementos adyacentes
 		 * y si no están bien ordenados los intercambiamos
@@ -49,24 +58,67 @@ public class OrdenaArrays {
 		
 	}
 
+	public static int[] fusion(int[] arrayCliente, int[] arrayCliente1){
+		int [] arrayFusion = new int[arrayCliente.length + arrayCliente1.length];
+		//nos situamos en la primera posicion de cada array
+		int i = 0; //array
+		int j = 0; //array1
+		int k = 0; //array2
+		
+		while(i < arrayCliente.length && j < arrayCliente1.length) {
+			if(arrayCliente[i] < arrayCliente1[j]) {
+				arrayFusion[k] = arrayCliente[i];
+				i++;
+				k++;
+			}else {
+				arrayFusion[k] = arrayCliente1[j];
+				j++;
+				k++;
+			}
+		}
+		while(i < arrayCliente.length) {
+			arrayFusion[k] = arrayCliente[i];
+			i++;
+			k++;
+		}
+		
+		while(j < arrayCliente1.length) {
+			arrayFusion[k] = arrayCliente1[j];
+			k++;
+			j++;
+		}
+		arrayFusion.length = k;
+		return arrayFusion;
+	}
 	
 	public void run() {
 		
 		try {
 			ObjectInputStream ois = new ObjectInputStream(cliente.getInputStream());
-								
+			
 			ObjectOutputStream oos = new ObjectOutputStream(cliente.getOutputStream());
 			
-			int [] array = ois.readObject();
+			int [] arrayCliente = (int[]) ois.readObject();
 			
-			ordenarBurbuja.writeObject(array);
+			int [] arrayCliente1 = (int []) ois.readObject();
+			
+			ordenaBurbuja(arrayCliente);
+			ordenaBurbuja(arrayCliente1);
+			int [] arrayFusionado = fusion(arrayCliente, arrayCliente1);
+			
+			oos.writeObject(arrayFusionado);
 		
 		
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 
 		
 	}
 	
+	
 }
+	
+

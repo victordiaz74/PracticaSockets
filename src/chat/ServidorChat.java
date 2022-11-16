@@ -5,7 +5,6 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 public class ServidorChat {
@@ -55,17 +54,18 @@ public class ServidorChat {
 	public void eliminar(Socket s) {
 		PrintWriter pw;
 		
+		try {
+			lista.remove(s);
+			pw = new PrintWriter(s.getOutputStream());
+			contClientes--;
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 }
 
-class ManejadorPeticionChat extends Thread {
-	
-	Socket cliente;
-	
-	public ManejadorPeticionChat(Socket s) {
-		cliente = s;
-	}
-	
-	
-}
+

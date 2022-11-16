@@ -19,6 +19,15 @@ public class ClienteTelnet {
 
 	private static void conectarseA(String servidor, int puerto) {
 		
+		try {
+			//Creamos el socket TCP
+			Socket socketCliente = new Socket(servidor, puerto);
+			ManejadorPeticionChat hilo1 = new ManejadorPeticionChat(socketCliente);
+			hilo1.start();
+			
+		}catch (IOException e) {
+			
+		}
 		
 		
 		

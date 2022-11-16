@@ -32,7 +32,7 @@ public class ServidorChat {
 		
 	}
 	
-	public void difundir(String nombre, String mensaje) {
+	public synchronized void difundir(String nombre, String mensaje) {
 		
 		Socket s;
 		PrintWriter pw;
@@ -48,21 +48,25 @@ public class ServidorChat {
 				e.printStackTrace();
 			}
 		}
+		notifyAll();
 		
 	}
 	
-	public void eliminar(Socket s) {
+	public synchronized void eliminar(Socket s) {
 		PrintWriter pw;
 		
-		try {
-			lista.remove(s);
-			pw = new PrintWriter(s.getOutputStream());
-			contClientes--;
-			
-		} catch (IOException e) {
-			e.printStackTrace();
+		for (int i = 0; i < lista.size(); i++) {
+			s = lista.get(i);
+			try {
+				lista.remove(s);
+				pw = new PrintWriter(s.getOutputStream());
+				contClientes--;
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		
+		notifyAll();
 		
 	}
 	

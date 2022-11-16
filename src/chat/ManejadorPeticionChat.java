@@ -18,7 +18,6 @@ public class ManejadorPeticionChat extends Thread {
 	public ManejadorPeticionChat(Socket cliente) {
 		this.cliente = cliente;
 		
-		
 	}
 	
 	public void run() {
@@ -33,9 +32,14 @@ public class ManejadorPeticionChat extends Thread {
 			salida.println("Introduce tu nombre: ");
 			String nombre = entrada.readLine();
 			
+			try {
+                sleep(100);
+            } catch (InterruptedException e) {
+            	System.err.println("Error espera:" + e.getMessage());
+            }	
 			
 		}catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("Error: " + e.getMessage());
 		}
 			
 		

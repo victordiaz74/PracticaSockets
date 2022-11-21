@@ -13,19 +13,12 @@ public class ManejadorPeticionChat extends Thread {
 	Socket cliente;
 	BufferedReader entrada;
 	PrintWriter salida;
-	PrintStream pantalla;
 	String linea;
+	String salir = "adios";
 	
 	public ManejadorPeticionChat(Socket cliente) {
 		this.cliente = cliente;
 		
-		
-	}
-	
-	public ManejadorPeticionChat(BufferedReader entrada, PrintStream pantalla, PrintWriter salida) {
-		this.entrada = entrada;
-		this.salida = salida;
-		this.pantalla = pantalla;
 	}
 
 	public void run() {
@@ -34,18 +27,16 @@ public class ManejadorPeticionChat extends Thread {
 			
 			entrada = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
 			salida = new PrintWriter(cliente.getOutputStream(), true);
-
 			
-			salida.println("Bienvenido \nPara salir teclea: adios");
 			salida.println("Introduce tu nombre: ");
 			String nombre = entrada.readLine();
-			linea = entrada.readLine();
 			ServidorChat.difundir(nombre, "Conectado al chat");
-			
-			while(!linea.equals("adios")) {
+			salida.println("Bienvenido \nPara salir teclea: adios");
+			linea = entrada.readLine();
+			while(!linea.equals(salir)) {
 				ServidorChat.difundir(nombre, linea);
 				linea = entrada.readLine();
-				if(linea.equals("adios")) {
+				if(linea.equals(salir)) {
 					ServidorChat.difundir(nombre, "se ha desconectado");
 					ServidorChat.eliminar(cliente);
 				}

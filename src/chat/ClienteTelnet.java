@@ -1,12 +1,14 @@
 package chat;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class ClienteTelnet {
 	
 	static String servidor = "localhost";
-	static int puerto = 11100;
+	static int puerto = 9556;
 
 	public static void main(String[] args) {
 		
@@ -22,14 +24,17 @@ public class ClienteTelnet {
 		try {
 			//Creamos el socket TCP
 			Socket socketCliente = new Socket(servidor, puerto);
-			ManejadorPeticionChat hilo1 = new ManejadorPeticionChat(socketCliente);
-			hilo1.start();
+			Hilo hiloLectura = new Hilo(socketCliente.getInputStream(), System.out);
+			Hilo hiloEscritura = new Hilo(System.in, socketCliente.getOutputStream());
+
+			hiloLectura.start();
+			hiloEscritura.start();
 			
 		}catch (IOException e) {
 			
 		}
 		
-		
-		
 	}
+	
+	
 }

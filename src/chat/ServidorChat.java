@@ -1,6 +1,7 @@
 package chat;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -33,28 +34,31 @@ public class ServidorChat {
 		
 	}
 	
-	public synchronized static void difundir(String nombre, String mensaje) {
+	public static void difundir(String nombre, String mensaje) {
 		
-		Socket s;
-		PrintWriter pw;
+		Socket s = null;
+		OutputStream out = null;
+		PrintWriter pw = null;
 		
 		for (int i = 0; i < lista.size(); i++) {
 			s = lista.get(i);
 			try {
-				pw = new PrintWriter(s.getOutputStream());
-				pw.println(nombre + " se ha conectado");
-				pw.println(mensaje);
-				pw.close();
+				out = s.getOutputStream();
+				pw = new PrintWriter(out, true);
+				pw.println(nombre + ":" +  mensaje);
+
+				pw.flush();
 				
 			} catch (IOException e) {
 				e.printStackTrace();
+			}finally {
+				//pw.close();
 			}
 		}
 		
-		
 	}
 	
-	public synchronized static void eliminar(Socket s) {
+	public static void eliminar(Socket s) {
 		PrintWriter pw;
 		
 		for (int i = 0; i < lista.size(); i++) {
@@ -63,6 +67,11 @@ public class ServidorChat {
 				lista.remove(s);
 				pw = new PrintWriter(s.getOutputStream());
 				contClientes--;
+				if(contClientes == 0) {
+					pw.println("No hay usuarios. ADIOS");
+					pw.close();
+				}
+				
 				
 			} catch (IOException e) {
 				e.printStackTrace();

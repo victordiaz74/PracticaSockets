@@ -2,9 +2,7 @@ package chat;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -31,19 +29,20 @@ public class ManejadorPeticionChat extends Thread {
 			salida.println("Introduce tu nombre: ");
 			String nombre = entrada.readLine();
 			ServidorChat.difundir(nombre, "Conectado al chat");
-			salida.println("Bienvenido \nPara salir teclea: adios");
+			salida.println("Bienvenido\nPara salir teclea: adios");
 			linea = entrada.readLine();
+
 			while(!linea.equals(salir)) {
-				ServidorChat.difundir(nombre, linea);
+				ServidorChat.difundir(nombre, linea);	
 				linea = entrada.readLine();
-				if(linea.equals(salir)) {
-					ServidorChat.difundir(nombre, "se ha desconectado");
-					ServidorChat.eliminar(cliente);
-				}
+			}
+			if(linea.equals(salir)) {
+				ServidorChat.difundir(nombre, "se ha desconectado");
+				ServidorChat.eliminar(cliente);
 			}
 			
 			try {
-                sleep(100);
+                sleep(1000);
             } catch (InterruptedException e) {
             	System.err.println("Error espera:" + e.getMessage());
             }	

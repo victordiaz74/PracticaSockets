@@ -24,14 +24,14 @@ public class ClienteTelnet {
 		try {
 			//Creamos el socket TCP
 			Socket socketCliente = new Socket(servidor, puerto);
-			Hilo hiloLectura = new Hilo(socketCliente.getInputStream(), System.out);
-			Hilo hiloEscritura = new Hilo(System.in, socketCliente.getOutputStream());
+			Hilo hiloEntrada = new Hilo(socketCliente.getInputStream(), System.out);
+			Hilo hiloSalida = new Hilo(System.in, socketCliente.getOutputStream());
 
-			hiloLectura.start();
-			hiloEscritura.start();
+			hiloEntrada.start();
+			hiloSalida.start();
 			
 		}catch (IOException e) {
-			
+			System.err.println(e.getLocalizedMessage());
 		}
 		
 	}
